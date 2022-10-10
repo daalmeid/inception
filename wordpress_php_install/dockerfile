@@ -1,0 +1,11 @@
+FROM debian:buster
+#COPY html_directory /usr/share/nginx/html
+#COPY Certificates/localhost.crt /etc/ssl/certs
+#COPY Certificates/localhost.key /etc/ssl/private
+RUN apt-get update -y && \
+    apt-get install -y wordpress && \
+    apt-get install -y php-fpm
+RUN mkdir /run/php/ && chmod 755 /run/php/
+COPY test.php /usr/share/php
+EXPOSE 9000
+ENTRYPOINT ["php-fpm7.3", "-F", "-R"]

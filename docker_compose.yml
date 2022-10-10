@@ -1,0 +1,27 @@
+version: "2.10.2"
+services:
+  nginx:
+    build: ./nginx_install
+    image: nginx_server:2.0
+    ports:
+      - "443:443"
+    container_name: live_nginx
+  wordpress:
+    build: ./wordpress_php_install
+    image: wordpress_barebones:1.0
+    container_name: live_wordpress
+  mariadb:
+    build: ./mariadb_install
+    image: mariadb_explore
+#    ports: 
+#      - "3306:3306"
+    container_name: live_mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=pass
+      - MYSQL_DATABASE=db
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pass
+      - MYSQL_ROOT_HOST='%'
+networks:
+  default:
+    name: network_exploring
