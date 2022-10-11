@@ -6,22 +6,40 @@ services:
     ports:
       - "443:443"
     container_name: live_nginx
-  wordpress:
-    build: ./wordpress_php_install
-    image: wordpress_barebones:1.0
-    container_name: live_wordpress
+    volumes:
+      - wp_data:/var/www/html/daalmeid.42.fr/
   mariadb:
     build: ./mariadb_install
     image: mariadb_explore
-#    ports: 
-#      - "3306:3306"
+    expose: 
+      - "3306"
     container_name: live_mariadb
     environment:
-      - MYSQL_ROOT_PASSWORD=pass
-      - MYSQL_DATABASE=db
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=pass
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=wordpressdb
+      - MYSQL_USER=wordpress
+      - MYSQL_PASSWORD=wordpress
       - MYSQL_ROOT_HOST='%'
+  wordpress:
+    depends_on:
+      - mariadb
+    build: ./wordpress_php_install
+    image: wordpress_barebones:1.0
+    container_name: live_wordpress
+    volumes:
+      - wp_data:/var/www/html/daalmeid.42.fr/
+    environment:
+      DB_HOST: mariadb:3306
+      DB_USER: wordpress
+      DB_PASSWORD: wordpress
+volumes:
+  wp_data:
+    name: wp_data
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: /home/daalmeid/data/
 networks:
   default:
     name: network_exploring

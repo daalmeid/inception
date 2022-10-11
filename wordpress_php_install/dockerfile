@@ -3,9 +3,17 @@ FROM debian:buster
 #COPY Certificates/localhost.crt /etc/ssl/certs
 #COPY Certificates/localhost.key /etc/ssl/private
 RUN apt-get update -y && \
-    apt-get install -y wordpress && \
-    apt-get install -y php-fpm
+    apt-get install -y \
+    php-fpm \
+    curl \
+    unzip
 RUN mkdir /run/php/ && chmod 755 /run/php/
-COPY test.php /usr/share/php
+RUN mkdir -p /var/www/html/daalmeid.42.fr \
+    && cd /var/www/html/daalmeid.42.fr \
+    && curl -LO https://wordpress.org/latest.zip \
+    && unzip latest.zip \
+    && rm latest.zip
+RUN sed -i 's:listen = /run/php/php7.3-fpm.sock:listen = 9000:g' /etc/php/7.3/fpm/pool.d/www.conf
+#COPY test.php /var/www/html/daalmeid.42.fr
 EXPOSE 9000
 ENTRYPOINT ["php-fpm7.3", "-F", "-R"]

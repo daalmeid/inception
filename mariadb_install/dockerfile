@@ -2,14 +2,14 @@ FROM debian:buster
 #COPY html_directory /usr/share/nginx/html
 #COPY Certificates/localhost.crt /etc/ssl/certs
 #COPY Certificates/localhost.key /etc/ssl/private
-EXPOSE 3306
 RUN apt-get update -y \
     && apt-get install -y mariadb-server
 #COPY my.cnf /etc/mysql
 RUN mysql_install_db --user=mysql
 ##    && echo 'export PATH=$PATH:/usr/local/mysql/bin' >> .bash_profile
 RUN service mysql start \
-    && mysql -u root -e "CREATE USER 'test'@'%' IDENTIFIED BY '123456'; GRANT ALL PRIVILEGES ON *. * TO 'test'@'%'; FLUSH PRIVILEGES;" \
+    && mysql -u root -e "CREATE USER 'wordpress'@'%' IDENTIFIED BY 'wordpress'; GRANT ALL PRIVILEGES ON *. * TO 'wordpress'@'%'; FLUSH PRIVILEGES;" \
+    && mysql -u root -e "CREATE DATABASE wordpressdb;" \
     && '/usr/bin/mysqladmin' -u root password 'root_password'
 RUN sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mysql/mariadb.conf.d/50-server.cnf \
     && service mysql restart

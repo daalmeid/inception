@@ -1,8 +1,8 @@
-FROM alpine:3.16.2
+FROM debian:buster
 COPY html_directory /usr/share/nginx/html
-COPY Certificates/localhost.crt /etc/ssl/certs
-COPY Certificates/localhost.key /etc/ssl/private
-RUN apk update && apk add \
+COPY Certificates/localhost.crt /etc/ssl/certs/
+COPY Certificates/localhost.key /etc/ssl/private/
+RUN apt-get update && apt-get install -y \
     nginx
-COPY default.conf /etc/nginx/http.d
+COPY default.conf /etc/nginx/conf.d/
 CMD ["nginx", "-g", "daemon off;"]
