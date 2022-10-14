@@ -29,7 +29,7 @@ services:
     volumes:
       - wp_data:/var/www/html/daalmeid.42.fr/
     environment:
-      DB_HOST: mariadb:3306
+      DB_HOST: live_mariadb:3306
       DB_USER: wordpress
       DB_PASSWORD: wordpress
 volumes:

@@ -13,4 +13,4 @@ RUN service mysql start \
     && '/usr/bin/mysqladmin' -u root password 'root_password'
 RUN sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mysql/mariadb.conf.d/50-server.cnf \
     && service mysql restart
-CMD ["mysqld_safe"]
+ENTRYPOINT ["mysqld_safe"]
