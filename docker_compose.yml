@@ -32,6 +32,8 @@ services:
       DB_HOST: live_mariadb:3306
       DB_USER: wordpress
       DB_PASSWORD: wordpress
+      WP_USER: daalmeid
+      WP_U_PASS: testing
 volumes:
   wp_data:
     name: wp_data
@@ -39,7 +41,7 @@ volumes:
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: /home/daalmeid/data/
+      device: /home/daalmeid/data/wp_volume
 networks:
   default:
     name: network_exploring

@@ -1,13 +1,11 @@
 FROM debian:buster
-#COPY html_directory /usr/share/nginx/html
-#COPY Certificates/localhost.crt /etc/ssl/certs
-#COPY Certificates/localhost.key /etc/ssl/private
 RUN apt-get update -y && \
     apt-get install -y \
     php-fpm \
     php-mysql \
     curl \
-    mariadb-client
+    mariadb-client \
+    netcat
 RUN mkdir /run/php/ && chmod 755 /run/php/
 RUN mkdir -p /var/www/html/daalmeid.42.fr \
     && cd /var/www/html/daalmeid.42.fr \
