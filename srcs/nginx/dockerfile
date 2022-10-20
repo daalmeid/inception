@@ -1,0 +1,7 @@
+FROM debian:buster
+COPY Certificates/localhost.crt /etc/ssl/certs/
+COPY Certificates/localhost.key /etc/ssl/private/
+RUN apt-get update && apt-get install -y \
+    nginx
+COPY default.conf /etc/nginx/conf.d/
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

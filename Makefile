@@ -2,22 +2,28 @@
 
 NAME	=		Inception
 
+################## .yml FILE ################
+
+YML		=		srcs/docker_compose.yml
+
 ################## RULES ###################
 
 all: $(NAME)
 
 $(NAME):
-	docker compose -f docker_compose.yml up -d
+	docker compose -f $(YML) up -d
 
 ################## CLEAN ###################
 
-clean:
-	docker compose -f docker_compose.yml down
+stop:
+	docker compose -f $(YML) stop
 
-fclean: clean
-	docker rmi mariadb_explore:latest  wordpress_barebones:1.0  nginx_server:2.0
-	docker volume rm wp_data
+clean:
+	docker compose -f $(YML) down
+
+fclean:
+	docker compose -f $(YML) down --rmi all --volumes
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re stop

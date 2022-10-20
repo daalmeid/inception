@@ -1,0 +1,52 @@
+version: "2.10.2"
+services:
+  nginx:
+    depends_on:
+      - wordpress
+    build: ./nginx
+    image: nginx_server:final
+    ports:
+      - "443:443"
+    container_name: live_nginx
+    volumes:
+      - wp_data:/var/www/html/daalmeid.42.fr/
+  mariadb:
+    build: ./mariadb
+    image: mariadb_custom:final
+    expose: 
+      - "3306"
+    container_name: live_mariadb
+    volumes:
+      - mariadb_data:/var/lib/mysql/
+    env_file:
+      - .env
+  wordpress:
+    depends_on:
+      - mariadb
+    build: ./wordpress
+    image: wordpress_custom:final
+    container_name: live_wordpress
+    volumes:
+      - wp_data:/var/www/html/daalmeid.42.fr/
+    expose:
+      - "9000"
+    env_file:
+      - .env
+volumes:
+  wp_data:
+    name: wp_data
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: /home/daalmeid/data/wp_volume
+  mariadb_data:
+    name: mariadb_data
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: /home/daalmeid/data/mariadb_volume
+networks:
+  default:
+    name: inception_network
